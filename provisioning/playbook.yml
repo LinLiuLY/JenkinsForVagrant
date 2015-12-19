@@ -3,9 +3,9 @@
   remote_user: vagrant
   sudo: yes
 
-  tasks:
+  pre_tasks:
   - name: hello world
-    shell: echo "hello-world">hello.txt
+    shell: echo "hello world!" > hello.txt
 
   - name: install curl
     apt: name=curl state=latest force=yes
@@ -16,15 +16,18 @@
   - name: install unzip
     apt: name=zip state=latest force=yes
 
-  - name: copy and unarchive jdk
-    unarchive: src=../package/jdk-8u65-linux-x64.tar_0.gz dest=/opt owner=vagrant group=vagrant
+  - name: install gradle
+    unarchive: src=../package/gradle-2.9-bin.zip dest=/opt owner=vagrant group=vagrant
+
+  - name: install java
+    unarchive: src=../package/jdk-8u65-linux-x64.gz dest=/opt owner=vagrant group=vagrant
 
   - name: add symbo link for java
     file: src=/opt/jdk1.8.0_65/bin/java dest=/usr/bin/java state=link
 
-  - name: install gradle
-    unarchive: src=../package/gradle-2.9-bin.zip dest=/opt owner=vagrant group=vagrant
-
   - name: add symbo link for gradle
     file: src=/opt/gradle-2.9/bin/gradle dest=/usr/bin/gradle state=link
-    
+
+  roles:
+    - jenkins
+    - tomcat
